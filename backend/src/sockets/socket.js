@@ -5,7 +5,8 @@ exports.socketHandler = (io) => {
     console.log('Socket Connected');
 
     socket.on('user:join', (userId) => {
-      socket.join(userId);
+      const room = `user:${String(userId)}`;
+      socket.join(room);
     });
 
     socket.on('admin:join', () => {

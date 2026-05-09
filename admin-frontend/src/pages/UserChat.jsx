@@ -23,7 +23,16 @@ export default function UserChat() {
     }
 
     setUser(storedUser);
-    socket.emit('user:join', storedUser._id || storedUser.id);
+
+    const userRoom = String(storedUser._id || storedUser.id);
+    const joinUserRoom = () => {
+      socket.emit('user:join', userRoom);
+    };
+
+    socket.on('connect', joinUserRoom);
+    if (socket.connected) {
+      joinUserRoom();
+    }
 
     const loadMessages = async () => {
       try {
@@ -35,15 +44,18 @@ export default function UserChat() {
     };
 
     loadMessages();
-    socket.on('message:receive', (msg) => {
+    const handleMessageReceive = (msg) => {
       setMessages((prev) => {
         const isDuplicate = prev.some((item) => item._id === msg._id);
         return isDuplicate ? prev : [...prev, msg];
       });
-    });
+    };
+
+    socket.on('message:receive', handleMessageReceive);
 
     return () => {
-      socket.off('message:receive');
+      socket.off('connect', joinUserRoom);
+      socket.off('message:receive', handleMessageReceive);
     };
   }, [navigate]);
 

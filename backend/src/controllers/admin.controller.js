@@ -44,7 +44,7 @@ exports.reply = async (req, res) => {
       message: req.body.message
     });
 
-    global.io.to(req.params.userId).emit('message:receive', msg);
+    global.io.to(`user:${String(req.params.userId)}`).emit('message:receive', msg);
 
     res.json(msg);
   } catch (err) {
