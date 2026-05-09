@@ -38,16 +38,18 @@ exports.getConversation = async (req, res) => {
 
 exports.reply = async (req, res) => {
   try {
+
     const msg = await Message.create({
       userId: req.params.userId,
       senderType: 'admin',
       message: req.body.message
     });
-
-    global.io.to(`user:${String(req.params.userId)}`).emit('message:receive', msg);
+    console.log('Admin sent message to user:', `user:${String(req.params.userId)}`);
+    global.io.to(`user:${String(req.params.userId)}`).emit('message:receive', msg); // admin to User room
 
     res.json(msg);
   } catch (err) {
+    console.log('Error sending message:', err);
     res.status(500).json({ message: err.message });
   }
 };

@@ -26,7 +26,7 @@ export default function Login() {
           email: form.email,
           password: form.password
         });
-        localStorage.setItem('token', res.data.token);
+        localStorage.setItem(res.data.admin._id, res.data.token);
         localStorage.setItem('role', 'admin');
         localStorage.setItem('user', JSON.stringify(res.data.admin));
         navigate('/dashboard');
@@ -46,7 +46,7 @@ export default function Login() {
         });
       }
 
-      localStorage.setItem('token', res.data.token);
+      localStorage.setItem(res.data.user._id, res.data.token);
       localStorage.setItem('role', 'user');
       localStorage.setItem('user', JSON.stringify(res.data.user));
       navigate('/chat');

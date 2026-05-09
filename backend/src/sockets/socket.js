@@ -7,10 +7,12 @@ exports.socketHandler = (io) => {
     socket.on('user:join', (userId) => {
       const room = `user:${String(userId)}`;
       socket.join(room);
+      console.log(`User ${userId} joined room ${room}`);
     });
 
     socket.on('admin:join', () => {
       socket.join('admins');
+      console.log('Admin joined admins room');
     });
 
     socket.on('disconnect', () => {

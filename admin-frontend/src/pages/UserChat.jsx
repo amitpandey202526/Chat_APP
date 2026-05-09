@@ -36,7 +36,7 @@ export default function UserChat() {
 
     const loadMessages = async () => {
       try {
-        const res = await api.get('/chat/my-messages');
+        const res = await api.get('/chat/my-messages/' + (user._id || user.id));
         setMessages(res.data);
       } catch (err) {
         setError('Unable to load chat.');
@@ -45,6 +45,7 @@ export default function UserChat() {
 
     loadMessages();
     const handleMessageReceive = (msg) => {
+      console.log('Received message:', msg);
       setMessages((prev) => {
         const isDuplicate = prev.some((item) => item._id === msg._id);
         return isDuplicate ? prev : [...prev, msg];
@@ -70,8 +71,11 @@ export default function UserChat() {
     setError('');
 
     try {
+          console.log('Sending message:', newMessage);
+
       const res = await api.post('/chat/send', {
-        message: newMessage.trim()
+        message: newMessage.trim(),
+        id: user._id || user.id
       });
 
       setMessages((prev) => {

@@ -9,12 +9,12 @@ export default function ChatWindow({ selectedUser, selectedUserLabel, messages, 
             <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Conversation</p>
             <h1 className="mt-2 text-3xl font-semibold text-white">{chatTitle}</h1>
           </div>
-          <button
+          {/* <button
             onClick={onLogout}
             className="mt-4 inline-flex items-center justify-center rounded-3xl border border-slate-800 bg-slate-900 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-slate-600 hover:bg-slate-800 sm:mt-0"
           >
-            Logout
-          </button>
+            Logout1
+          </button> */}
         </div>
       </div>
 

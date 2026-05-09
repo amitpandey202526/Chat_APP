@@ -59,6 +59,8 @@ export default function Dashboard() {
     (msg) => {
       const messageUserId = String(msg.userId);
 
+      console.log('Received message for user:', messageUserId, 'Selected user:', selectedUser);
+
       setConversations((prev) => {
         const existing = prev.find((item) => String(item._id) === messageUserId);
         if (existing) {
@@ -120,7 +122,7 @@ export default function Dashboard() {
     if (!selectedUser || !newMessage.trim()) {
       return;
     }
-
+console.log('Selected User:', selectedUser);
     const normalizedUserId = String(selectedUser);
     setError('');
 
