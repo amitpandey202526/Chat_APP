@@ -26,7 +26,7 @@ export default function Login() {
           email: form.email,
           password: form.password
         });
-        localStorage.setItem(res.data.admin._id, res.data.token);
+        localStorage.setItem('adminToken', res.data.token);
         localStorage.setItem('role', 'admin');
         localStorage.setItem('user', JSON.stringify(res.data.admin));
         navigate('/dashboard');
@@ -46,7 +46,7 @@ export default function Login() {
         });
       }
 
-      localStorage.setItem(res.data.user._id, res.data.token);
+      localStorage.setItem('userToken', res.data.token);
       localStorage.setItem('role', 'user');
       localStorage.setItem('user', JSON.stringify(res.data.user));
       navigate('/chat');
@@ -58,7 +58,8 @@ export default function Login() {
   };
 
   const switchMode = (nextMode) => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('userToken');
     localStorage.removeItem('role');
     localStorage.removeItem('user');
     setMode(nextMode);

@@ -13,7 +13,7 @@ export default function UserChat() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('userToken');
     const role = localStorage.getItem('role');
     const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
 
@@ -91,7 +91,8 @@ export default function UserChat() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('userToken');
     localStorage.removeItem('role');
     localStorage.removeItem('user');
     navigate('/');

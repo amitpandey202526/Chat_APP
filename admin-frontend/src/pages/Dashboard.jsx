@@ -97,11 +97,12 @@ export default function Dashboard() {
   );
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('adminToken');
     const role = localStorage.getItem('role');
 
     if (!token || role !== 'admin') {
-      localStorage.removeItem('token');
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('userToken');
       localStorage.removeItem('role');
       localStorage.removeItem('user');
       navigate('/');
@@ -150,7 +151,8 @@ console.log('Selected User:', selectedUser);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('userToken');
     localStorage.removeItem('role');
     localStorage.removeItem('user');
     navigate('/');
