@@ -4,6 +4,6 @@ const { requireUser } = require('../middleware/role.middleware');
 const chatController = require('../controllers/chat.controller');
 
 router.get('/my-messages', auth, requireUser, chatController.getMyMessages);
-router.post('/send', auth, requireUser, chatController.sendMessage);
+router.post('/send', auth, chatController.sendMessage);
 
 module.exports = router;
