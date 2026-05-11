@@ -3,6 +3,8 @@ const User = require('../models/User');
 const Admin = require('../models/Admin');
 const { generateToken } = require('../utils/jwt');
 
+
+//user register
 exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;

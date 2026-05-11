@@ -2,7 +2,10 @@ const Message = require('../models/Message');
 const User = require('../models/User');
 
 exports.getConversations = async (req, res) => {
+
+  // Aggregate messages to get latest message and unread count for each user
   const users = await Message.aggregate([
+    // Group messages by userId to get latest message and count of unread messages for admins
     {
       $group: {
         _id: '$userId',
@@ -29,6 +32,7 @@ exports.getConversations = async (req, res) => {
 };
 
 exports.getConversation = async (req, res) => {
+  // Fetch all messages for the specified user
   const messages = await Message.find({
     userId: req.params.userId
   }).sort({ createdAt: 1 });
@@ -37,6 +41,7 @@ exports.getConversation = async (req, res) => {
 };
 
 exports.reply = async (req, res) => {
+  // Create a new message from the admin to the user
   try {
 
     const msg = await Message.create({
@@ -55,6 +60,7 @@ exports.reply = async (req, res) => {
 };
 
 exports.markAsRead = async (req, res) => {
+  // Mark all messages from the user as read by the admin
   try {
     await Message.updateMany({
       userId: req.params.userId,

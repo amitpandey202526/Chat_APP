@@ -17,20 +17,27 @@ const { socketHandler } = require('./sockets/socket');
 const seedAdmin = require('./utils/seedAdmin');
 const seedUser = require('./utils/seedUser');
 
-const app = express();
+const app = express(); // Create HTTP server for Socket.IO to attach to
 const server = http.createServer(app);
 
+
+// Initialize Socket.IO server with CORS settings  socket server created 
+//frontend will connect to this server and exchange data in real time
+//frontend will emit events like 'user:join' and 'admin:join' to join specific rooms for targeted notifications and messages
 const io = new Server(server, {
   cors: {
     origin: '*'
   }
 });
 
+
 const redisUrl = process.env.REDIS_URL;
-let pubClient;
-let subClient;
+let pubClient;  //message publisher client for Socket.IO Redis adapter
+let subClient;  //message subscriber client for Socket.IO Redis adapter(Receiver)
 let redisAdapterEnabled = false;
 
+
+// Function to attach Redis adapter once both clients are ready
 const attachRedisAdapter = () => {
   if (!redisAdapterEnabled && pubClient && subClient) {
     io.adapter(createAdapter(pubClient, subClient));
@@ -39,6 +46,8 @@ const attachRedisAdapter = () => {
   }
 };
 
+
+// If Redis URL is configured, set up Redis clients and attach adapter for scaling Socket.IO across multiple server instances
 if (redisUrl) {
   pubClient = new Redis(redisUrl, {
     maxRetriesPerRequest: 2,
@@ -48,6 +57,7 @@ if (redisUrl) {
     }
   });
 
+  //
   subClient = pubClient.duplicate();
 
   const handleRedisError = (err) => {
@@ -87,6 +97,8 @@ app.use('/api/chat', chatRoutes);
 mongoose.connect(process.env.MONGO_URI)
 .then(async () => {
   console.log('MongoDB Connected');
+
+  // Seed default admin and user credentials if not present
 
   await seedAdmin();
   await seedUser();

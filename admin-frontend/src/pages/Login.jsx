@@ -10,6 +10,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Clear tokens and user info on component mount to ensure a fresh login state
   const submit = async (e) => {
     e.preventDefault();
     localStorage.removeItem('token');
@@ -29,6 +30,9 @@ export default function Login() {
         localStorage.setItem('adminToken', res.data.token);
         localStorage.setItem('role', 'admin');
         localStorage.setItem('user', JSON.stringify(res.data.admin));
+
+        // Redirect to dashboard after successful admin login
+        
         navigate('/dashboard');
         return;
       }
@@ -49,6 +53,9 @@ export default function Login() {
       localStorage.setItem('userToken', res.data.token);
       localStorage.setItem('role', 'user');
       localStorage.setItem('user', JSON.stringify(res.data.user));
+
+      // Redirect to chat after successful user login or registration
+
       navigate('/chat');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed.');
@@ -76,18 +83,16 @@ export default function Login() {
             <button
               type="button"
               onClick={() => switchMode('admin')}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                mode === 'admin' ? 'bg-indigo-500 text-white' : 'text-slate-300 hover:text-white'
-              }`}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${mode === 'admin' ? 'bg-indigo-500 text-white' : 'text-slate-300 hover:text-white'
+                }`}
             >
               Admin
             </button>
             <button
               type="button"
               onClick={() => switchMode('user')}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                mode === 'user' ? 'bg-indigo-500 text-white' : 'text-slate-300 hover:text-white'
-              }`}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${mode === 'user' ? 'bg-indigo-500 text-white' : 'text-slate-300 hover:text-white'
+                }`}
             >
               User
             </button>
@@ -100,8 +105,8 @@ export default function Login() {
             {mode === 'admin'
               ? 'Sign in to manage conversations and reply instantly.'
               : register
-              ? 'Create your user account and start chatting with the admin.'
-              : 'Sign in to chat with the admin in real time.'}
+                ? 'Create your user account and start chatting with the admin.'
+                : 'Sign in to chat with the admin in real time.'}
           </p>
         </div>
 
@@ -155,13 +160,13 @@ export default function Login() {
               ? mode === 'admin'
                 ? 'Signing in...'
                 : register
-                ? 'Creating account...'
-                : 'Signing in...'
+                  ? 'Creating account...'
+                  : 'Signing in...'
               : mode === 'admin'
-              ? 'Sign in as Admin'
-              : register
-              ? 'Register user'
-              : 'Sign in as User'}
+                ? 'Sign in as Admin'
+                : register
+                  ? 'Register user'
+                  : 'Sign in as User'}
           </button>
         </form>
 

@@ -20,12 +20,14 @@ export default function Dashboard() {
     try {
       const res = await api.get('/admin/conversations');
       setConversations(res.data);
+
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Unable to load conversations.');
     }
   };
 
   const fetchConversation = async (userId) => {
+    // Normalize userId to string to ensure consistent comparisons and API calls
     const normalizedUserId = String(userId);
     setError('');
 
@@ -97,10 +99,18 @@ export default function Dashboard() {
   );
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
     const role = localStorage.getItem('role');
+    const token = localStorage.getItem('adminToken') || localStorage.getItem('token');
 
-    if (!token || role !== 'admin') {
+    if (role === 'admin' && token) {
+      if (!localStorage.getItem('adminToken')) {
+        localStorage.setItem('adminToken', token);
+        localStorage.removeItem('token');
+      }
+      socket.emit('admin:join');
+      fetchConversations();
+      socket.on('message:receive', handleIncomingMessage);
+    } else {
       localStorage.removeItem('adminToken');
       localStorage.removeItem('userToken');
       localStorage.removeItem('role');
@@ -108,10 +118,6 @@ export default function Dashboard() {
       navigate('/');
       return;
     }
-
-    socket.emit('admin:join');
-    fetchConversations();
-    socket.on('message:receive', handleIncomingMessage);
 
     return () => {
       socket.off('message:receive', handleIncomingMessage);

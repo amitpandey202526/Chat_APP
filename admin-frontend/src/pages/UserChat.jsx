@@ -16,7 +16,6 @@ export default function UserChat() {
     const token = localStorage.getItem('userToken');
     const role = localStorage.getItem('role');
     const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
-
     if (!token || role !== 'user' || !storedUser) {
       navigate('/');
       return;
@@ -36,9 +35,10 @@ export default function UserChat() {
 
     const loadMessages = async () => {
       try {
-        const res = await api.get('/chat/my-messages/' + (user._id || user.id));
+        const res = await api.get('/chat/my-messages/' + (storedUser?._id || storedUser?.id));
         setMessages(res.data);
       } catch (err) {
+        console.error('Error loading messages:', err);
         setError('Unable to load chat.');
       }
     };
@@ -71,7 +71,7 @@ export default function UserChat() {
     setError('');
 
     try {
-          console.log('Sending message:', newMessage);
+      console.log('Sending message:', newMessage);
 
       const res = await api.post('/chat/send', {
         message: newMessage.trim(),

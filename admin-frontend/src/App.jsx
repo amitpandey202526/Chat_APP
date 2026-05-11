@@ -7,6 +7,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        //routes for login, admin dashboard and user chat
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<UserChat />} />
